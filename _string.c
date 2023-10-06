@@ -29,7 +29,6 @@ char **string_manipulation(char *command)
 	}
 	if (*cmd == '/')
 	{
-		cmd = '\0';
 		cmd++;
 	}
 	args = (char **)malloc(MAX_ARGS_SIZE * sizeof(char *));
@@ -40,6 +39,12 @@ char **string_manipulation(char *command)
 	}
 
 	token = strtok(cmd, " ");
+	if (token == NULL)
+	{
+		free(command_copy);
+		args[0] = NULL;
+		return(args);
+	}
 
 	while (token != NULL && args_count < MAX_ARGS_SIZE)
 	{

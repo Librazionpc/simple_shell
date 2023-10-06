@@ -11,18 +11,21 @@
  * Return: Null to the main funtion to cause continuation
  */
 
-char *shell_processor(char *command, char *progName, int no_runs)
+char *shell_processor(char *command, char *progName, int no_runs, char *evnp[])
 {
 	char **args = NULL;
 	char *path_buffer = NULL;
 	char *path_needed = NULL;
 
 	args = string_manipulation(command);
-	if (args == NULL)
+	if (args[0] == NULL)
 	{
 		free_2d_arrays(args);
 		return (NULL);
 	}
+
+	if (strncmp(args[0], "env", 3) == 0)
+		handle_evnp(evnp);
 	path_buffer = handle_path();
 	if (path_buffer == NULL)
 	{
@@ -37,7 +40,7 @@ char *shell_processor(char *command, char *progName, int no_runs)
 		free(path_buffer);
 		return (NULL);
 	}
-	perform_args(path_needed, args);
+	perform_args(path_needed, args, evnp);
 	free(path_buffer);
 	return (NULL);
 }

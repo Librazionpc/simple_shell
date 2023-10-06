@@ -7,7 +7,7 @@
  *
  * Return: Always 0
  */
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *evnp[])
 {
 	char *cmd = NULL;
 	int program_runs = 0;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 			}
 			if (cmd == NULL)
 				continue;
-			shell_processor(cmd, argv[0], program_runs);
+			shell_processor(cmd, argv[0], program_runs, evnp);
 		}
 	}
 	return (0);

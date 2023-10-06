@@ -13,11 +13,12 @@
 #include <sys/wait.h>
 
 char *prompt(void);
-int main(int argc, char *argv[]);
-char *shell_processor(char *cmd, char *program_name, int no_program_runs);
+int main(int argc, char *argv[], char *evnp[]);
+char *shell_processor(char *cmd, char *progName, int progRuns, char *evnp[]);
 char **string_manipulation(char *command);
 void free_2d_arrays(char **args);
 char *handle_path(void);
+void handle_evnp(char *argv[]);
 char *args_exist_in_path(char *path_buf, char **args, char *progName, int run);
-int perform_args(char *path_needed, char **args);
+int perform_args(char *path_needed, char **args, char *evnp[]);
 #endif
