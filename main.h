@@ -16,6 +16,7 @@ char *prompt(void);
 int main(int argc, char *argv[], char *evnp[]);
 char *shell_processor(char *cmd, char *progName, int progRuns, char *evnp[]);
 char **string_manipulation(char *command);
+char *string_manipulation2(char *command);
 void free_2d_arrays(char **args);
 char *handle_path(void);
 void handle_evnp(char *argv[]);

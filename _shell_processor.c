@@ -16,23 +16,37 @@ char *shell_processor(char *command, char *progName, int no_runs, char *evnp[])
 	char **args = NULL;
 	char *path_buffer = NULL;
 	char *path_needed = NULL;
+	char *command_copy = NULL;
+	char *args2 = NULL;
+	size_t len = 0;
 
+	command_copy = strdup(command);
 	args = string_manipulation(command);
 	if (args[0] == NULL)
 	{
 		free_2d_arrays(args);
+		free(command_copy);
+		return (NULL);
+	}
+	args2 = string_manipulation2(command_copy);
+	if (args2 == NULL)
+	{
+		free_2d_arrays(args);
+		free(command_copy);
 		return (NULL);
 	}
 
 	if (strncmp(args[0], "env", 3) == 0)
 		handle_evnp(evnp);
+
 	path_buffer = handle_path();
 	if (path_buffer == NULL)
 	{
-		free_2d_arrays(args);
-		free(path_buffer);
-		return (NULL);
+		len = strlen(args2) + 1;
+		path_buffer = (char *)malloc(sizeof(char) * len);
+		strcpy(path_buffer, args2);
 	}
+
 	path_needed = args_exist_in_path(path_buffer, args, progName, no_runs);
 	if (path_needed == NULL)
 	{
@@ -41,6 +55,7 @@ char *shell_processor(char *command, char *progName, int no_runs, char *evnp[])
 		return (NULL);
 	}
 	perform_args(path_needed, args, evnp);
+	free(args2);
 	free(path_buffer);
 	return (NULL);
 }

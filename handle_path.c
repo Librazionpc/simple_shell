@@ -17,7 +17,6 @@ char *handle_path(void)
 	env_val = getenv("PATH");
 	if (env_val == NULL)
 	{
-		fprintf(stderr, "PATH environment varaible not found. \n");
 		return (NULL);
 	}
 	buffer_size = sizeof(path_buffer);
@@ -68,7 +67,7 @@ char *args_exist_in_path(char *path_buf, char **args, char *progName, int runs)
 	char *cmd_info = NULL;
 	size_t path_needed_size;
 
-	while (*path_ptr != '\0')
+	while (*path_ptr != '\0' && (strlen(path_buf) > 20))
 	{
 		path_needed_size = strlen(path_ptr) + 1 + strlen(args[0]) + 2;
 		path_needed = (char *)malloc(path_needed_size);
@@ -100,7 +99,24 @@ char *args_exist_in_path(char *path_buf, char **args, char *progName, int runs)
 
 	if (cmd_info == NULL)
 	{
+		if(strncmp(args[0], "./", 2) == 0)
+		{
+			cmd_info = malloc(sizeof(char) * strlen(args[0]) + 1);
+			strcpy(cmd_info, args[0]);
+			cmd_info[strlen(args[0]) + 1] = '\0';
+			return (cmd_info);
+		}
+		else if (strlen(path_buf) < 20)
+		{
+			if (access(path_buf, X_OK) == 0)
+			{
+				cmd_info = malloc(sizeof(char) * strlen(path_buf));
+                        	strcpy(cmd_info, path_buf);
+                        	return (cmd_info);
+			}
+		}
 		fprintf(stderr, "%s: %d: %s: not found\n", progName, runs, args[0]);
 	}
 	return (cmd_info);
 }
+
