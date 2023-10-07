@@ -13,8 +13,9 @@
 #include <sys/wait.h>
 
 char *prompt(void);
+void removeLeadingSpaces(char *command);
 int main(int argc, char *argv[], char *evnp[]);
-char *shell_processor(char *cmd, char *progName, int progRuns, char *evnp[]);
+int shell_processor(char *cmd, char *progName, int progRuns, char *evnp[]);
 char **string_manipulation(char *command);
 char *string_manipulation2(char *command);
 void free_2d_arrays(char **args);

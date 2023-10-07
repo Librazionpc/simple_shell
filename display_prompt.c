@@ -32,12 +32,6 @@ char *prompt(void)
 		free(command);
 		exit(EXIT_SUCCESS);
 	}
-	if (command[0] == '\n')
-	{
-		free(command);
-		return (NULL);
-	}
-
 	if (command[bytes_read - 1] == '\n')
 		command[bytes_read - 1] = '\0';
 

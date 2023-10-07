@@ -21,8 +21,8 @@ char **string_manipulation(char *command)
 	command_copy = strdup(command);
 	if (command_copy == NULL)
 		return (NULL);
-	removeLeadingSpaces(command_copy);
-	if (*command_copy == '/')
+	if ((*command_copy == '/') || ((strrchr(command, '/') != NULL)
+			&& (*command_copy != '.')))
 	{
 		cmd = command_copy;
 		cmd++;
@@ -39,7 +39,7 @@ char **string_manipulation(char *command)
 	}
 	else
 		token = strtok(command_copy, " ");
-	args = (char **)malloc(strlen(command_copy) * sizeof(char *));
+	args = (char **)malloc(MAX_ARGS_SIZE * sizeof(char *));
 	if (args == NULL)
 	{
 		free(command_copy);

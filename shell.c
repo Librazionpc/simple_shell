@@ -10,7 +10,7 @@
 int main(int argc, char *argv[], char *evnp[])
 {
 	char *cmd = NULL;
-	int program_runs = 0;
+	int program_runs = 0, exit_status = 0;
 
 	if (argc == 1)
 	{
@@ -21,12 +21,14 @@ int main(int argc, char *argv[], char *evnp[])
 			if (isatty(0) == 0)
 			{
 				if (cmd == NULL)
-					exit(EXIT_SUCCESS);
+					exit(exit_status);
 			}
 			if (cmd == NULL)
 				continue;
-			shell_processor(cmd, argv[0], program_runs, evnp);
+			exit_status = shell_processor(cmd, argv[0], program_runs, evnp);
+			if (exit_status != 0)
+				continue;
 		}
 	}
-	return (0);
+	return (exit_status);
 }

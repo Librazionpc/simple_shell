@@ -66,8 +66,8 @@ char *args_exist_in_path(char *path_buf, char **args, char *progName, int runs)
 	char *path_ptr = path_buf, *path_needed = NULL;
 	char *cmd_info = NULL;
 	size_t path_needed_size;
-
-	while (*path_ptr != '\0' && (strlen(path_buf) > 20))
+	
+	while (*path_ptr != '\0' && strlen(path_buf) > 30)
 	{
 		path_needed_size = strlen(path_ptr) + 1 + strlen(args[0]) + 2;
 		path_needed = (char *)malloc(path_needed_size);
@@ -99,21 +99,23 @@ char *args_exist_in_path(char *path_buf, char **args, char *progName, int runs)
 
 	if (cmd_info == NULL)
 	{
-		if(strncmp(args[0], "./", 2) == 0)
+		if(strncmp(args[0], ".", 1) == 0)
 		{
-			cmd_info = malloc(sizeof(char) * strlen(args[0]) + 1);
-			strcpy(cmd_info, args[0]);
-			cmd_info[strlen(args[0]) + 1] = '\0';
+			cmd_info = strdup(path_buf);
 			return (cmd_info);
 		}
-		else if (strlen(path_buf) < 20)
+		else if (strlen(path_buf) > 3)
 		{
 			if (access(path_buf, X_OK) == 0)
 			{
-				cmd_info = malloc(sizeof(char) * strlen(path_buf));
-                        	strcpy(cmd_info, path_buf);
-                        	return (cmd_info);
+				cmd_info = strdup(args[0]);
+				return (cmd_info);
 			}
+		}
+		if (strlen(path_buf) < 2 || strlen(path_buf) > 30)
+		{
+			cmd_info = strdup(args[0]);
+			return (cmd_info);
 		}
 		fprintf(stderr, "%s: %d: %s: not found\n", progName, runs, args[0]);
 	}
