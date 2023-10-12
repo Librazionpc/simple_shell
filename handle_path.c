@@ -1,124 +1,116 @@
 #include "main.h"
+#include <stdlib.h>
+
+char *get_path(char *command);
+char *concat_string(char *first, char *second);
 
 /**
- * handle_path - Function that works with getpath to provide PATH value
+ * get_full_path - compute the full path of a command
+ * @command: the command to compute it full path
  *
- * Return: Environment PATH, value
+ * Return: the full path
  */
-char *handle_path(void);
-char *handle_path(void)
-{
-	char path_buffer[MAX_COMMAND_SIZE];
-	char *env_val = NULL, *path = NULL;
-	char *path_token = NULL, *path_buffer_ptr = NULL;
-	size_t buffer_size;
-	int bytes_written = 0;
 
-	env_val = getenv("PATH");
-	if (env_val == NULL)
-	{
+char *get_full_path(char *command)
+{
+	struct stat file_stats;
+	char *full_path, *command_cpy = NULL;
+
+	if (command == NULL)
 		return (NULL);
-	}
-	buffer_size = sizeof(path_buffer);
-	path = strdup(env_val);
-	if (path == NULL)
+	command_cpy = strdup(command);
+	if (stat(command, &file_stats) == -1)
 	{
-		perror("strdup");
-		return (NULL);
-	}
-	path_token = strtok(path, ":");
-	if (path_token == NULL)
-	{
-		free(path);
-		return (NULL);
-	}
-	path_buffer_ptr = path_buffer;
-	while (path_token != NULL && buffer_size > 1)
-	{
-		bytes_written = snprintf(path_buffer_ptr, buffer_size, "%s/", path_token);
-		if (bytes_written < 0)
+		full_path = get_path(command_cpy);
+		if (full_path == NULL)
 		{
-			perror("snprintf");
-			free(path);
+			free(command_cpy);
 			return (NULL);
 		}
-		path_buffer_ptr += bytes_written;
-		buffer_size -= bytes_written;
-		path_token = strtok(NULL, ":");
+		else
+		{
+			free(command_cpy);
+			return (full_path);
+		}
 	}
-	free(path);
-	return (strdup(path_buffer));
+	return (command_cpy);
 }
 
 /**
- * args_exist_in_path - Function that check if user entry in correct
+ * get_path - search for each path in the environment variable
+ * @command: a command to search for
  *
- * @path_buf: Takes in the return of handle_path
- * @args: Takes in the return of string_manipulation
- * @progName: The of the program that is running
- * @runs: Sum of the parent arrays of argv from main
- *
- * Return: The pathname e.g(/bin/ls)
+ * Return: the path if found otherwise return NULL
  */
-
-char *args_exist_in_path(char *path_buf, char **args, char *progName, int runs)
+char *get_path(char *command)
 {
-	char *path_ptr = path_buf, *path_needed = NULL;
-	char *cmd_info = NULL;
-	size_t path_needed_size;
-	
-	while (*path_ptr != '\0' && strlen(path_buf) > 30)
-	{
-		path_needed_size = strlen(path_ptr) + 1 + strlen(args[0]) + 2;
-		path_needed = (char *)malloc(path_needed_size);
+	int i = 0;
+	struct stat file_stats;
+	char **path;
+	char *full_path;
+	char *result = getenv("PATH");
 
-		if (path_needed == NULL)
-		{
-			return (NULL);
-		}
-		snprintf(path_needed, path_needed_size, "/%s/%s", path_ptr, args[0]);
-		if (access(path_needed, X_OK) == 0)
-		{
-			cmd_info = (char *)malloc(sizeof(char) * strlen(path_needed) + 1);
-			if (cmd_info == NULL)
-			{
-				return (NULL);
-			}
-			strcpy(cmd_info, path_needed);
-			free(path_needed);
-			break;
-		}
-		path_ptr = strchr(path_ptr, '/');
-		if (path_ptr == NULL)
-		{
-			break;
-		}
-		path_ptr++;
-		free(path_needed);
-	}
-
-	if (cmd_info == NULL)
+	if (command == NULL)
+		return (NULL);
+	if (result == NULL || *result == '\0')
+		return (NULL);
+	path = split_to_string(result, ':');
+	while (path[i] != NULL)
 	{
-		if(strncmp(args[0], ".", 1) == 0)
+		full_path = concat_string(path[i], command);
+		if (stat(full_path, &file_stats) == 0)
 		{
-			cmd_info = strdup(path_buf);
-			return (cmd_info);
+			free_2d_arrays(path);
+			return (full_path);
 		}
-		else if (strlen(path_buf) > 3)
+		if (full_path != NULL)
 		{
-			if (access(path_buf, X_OK) == 0)
-			{
-				cmd_info = strdup(args[0]);
-				return (cmd_info);
-			}
+			free(full_path);
+			full_path = NULL;
 		}
-		if (strlen(path_buf) < 2 || strlen(path_buf) > 30)
-		{
-			cmd_info = strdup(args[0]);
-			return (cmd_info);
-		}
-		fprintf(stderr, "%s: %d: %s: not found\n", progName, runs, args[0]);
+		i++;
 	}
-	return (cmd_info);
+	free_2d_arrays(path);
+	return (NULL);
+}
+
+/**
+ * concat_string - concatinate two  strigns
+ * @first: first string
+ * @second: second string
+ *
+ * Return: the concatinated string
+ */
+char *concat_string(char *first, char *second)
+{
+	int len_first = 0;
+	int len_second = 0;
+	int i = 0, l = 0;
+	char *concated_string;
+
+	if (first == NULL || second == NULL)
+		return (NULL);
+
+	len_first = strlen(first);
+	len_second = strlen(second);
+
+	concated_string = malloc(sizeof(char) * (len_first + len_second + 2));
+	if (concated_string == NULL)
+		return (NULL);
+	for (l = 0; l < len_first; l++)
+	{
+		concated_string[i] = first[l];
+		i++;
+	}
+	concated_string[i] = '/';
+	i++;
+	for (l = 0; l < len_second; l++)
+	{
+		concated_string[i] = second[l];
+		i++;
+	}
+	concated_string[i] = '\0';
+	return (concated_string);
+
 }
 

@@ -1,21 +1,15 @@
 #include "main.h"
 
-/**
- *
- *
- *
- *
- *
- */
-
-void handle_evnp(char *envp[])
+int print_env(char **env)
 {
-	int i;
+	int i = 0;
 
-	for (i = 0; envp[i] != NULL; i++)
+	if (env == NULL || *env == NULL)
+		return (0);
+	while (env[i] != NULL)
 	{
-		printf("%s\n", envp[i]);
-		break;
+		_fprintf(STDOUT_FILENO, "%s\n", env[i]);
+		i++;
 	}
+	return (0);
 }
-

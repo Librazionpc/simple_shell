@@ -27,11 +27,6 @@ char *prompt(void)
 		return (NULL);
 	}
 
-	if (strncmp(command, "exit", 4) == 0)
-	{
-		free(command);
-		exit(EXIT_SUCCESS);
-	}
 	if (command[bytes_read - 1] == '\n')
 		command[bytes_read - 1] = '\0';
 

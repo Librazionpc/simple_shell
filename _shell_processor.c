@@ -10,56 +10,49 @@
  *
  * Return: Null to the main funtion to cause continuation
  */
-int shell_processor(char *command, char *progName, int no_runs, char *evnp[]);
-int shell_processor(char *command, char *progName, int no_runs, char *evnp[])
+int shell_processor(char *command, char *progName, int no_runs, char *evnp[], int exit_code)
 {
 	char **args = NULL;
-	char *path_buffer = NULL;
 	char *path_needed = NULL;
-	char *command_copy = NULL;
-	char *args2 = NULL;
 	int exit_status = 0;
-	size_t len = 0;
 
-	command_copy = strdup(command);
-	removeLeadingSpaces(command);
-	args = string_manipulation(command);
-	if (args[0] == NULL)
-	{
-		free_2d_arrays(args);
-		free(command_copy);
+	args  = split_to_string(command, ' ');
+	if (args == NULL)
 		return (exit_status);
-	}
-	args2 = string_manipulation2(command_copy);
-	if (args2 == NULL)
+	if (*args != NULL)
 	{
-		free_2d_arrays(args);
-		free(command_copy);
-		return (exit_status);
+		if (strcmp(args[0], "exit") == 0)
+		{
+			free_2d_arrays(args);
+			free(command);
+			exit(exit_code);
+		}
+		else if (strcmp(args[0], "env") == 0)
+			exit_status = print_env(evnp);
+		else
+		{
+			path_needed = get_full_path(args[0]);
+			if (path_needed != NULL)
+			{
+				if (access(path_needed, X_OK) == 0) 
+				{
+					exit_status = perform_args(path_needed, args, evnp);
+					free(path_needed);
+					free_2d_arrays(args);
+					return (exit_status);
+				}
+				else 
+				{
+					perror("Error");
+					free(path_needed);
+					free_2d_arrays(args);
+					return (130);
+				}
+			}
+			_fprintf(STDERR_FILENO, "%s: %d: %s: not found\n", progName, no_runs, command);
+			free_2d_arrays(args);
+			return (127);
+		}
 	}
-	if (strncmp(args[0], "env", 3) == 0)
-		handle_evnp(evnp);
-
-	path_buffer = handle_path();
-	if (path_buffer == NULL || (path_buffer != NULL && strncmp(args[0], ".", 1) == 0))
-	{
-		free(path_buffer);
-		len = strlen(args2) + 1;
-		path_buffer = (char *)malloc(sizeof(char) * len);
-		strcpy(path_buffer, args2);
-		path_buffer[len - 1] = '\0';
-	}
-
-	path_needed = args_exist_in_path(path_buffer, args, progName, no_runs);
-	if (path_needed == NULL)
-	{
-		free_2d_arrays(args);
-		free(path_buffer);
-		exit_status = 127;
-		return (exit_status);
-	}
-	exit_status = perform_args(path_needed, args, evnp);
-	free(args2);
-	free(path_buffer);
 	return (exit_status);
 }

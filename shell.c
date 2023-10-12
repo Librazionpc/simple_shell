@@ -12,6 +12,7 @@ int main(int argc, char *argv[], char *evnp[])
 	char *cmd = NULL;
 	int program_runs = 0, exit_status = 0;
 
+	evnp = NULL;
 	if (argc == 1)
 	{
 		while (1)
@@ -25,9 +26,13 @@ int main(int argc, char *argv[], char *evnp[])
 			}
 			if (cmd == NULL)
 				continue;
-			exit_status = shell_processor(cmd, argv[0], program_runs, evnp);
-			if (exit_status != 0)
-				continue;
+			else
+			{
+				exit_status = shell_processor(cmd, argv[0], program_runs, evnp, exit_status);
+				free(cmd);
+				if (exit_status != 0)
+					continue;
+			}
 		}
 	}
 	return (exit_status);
