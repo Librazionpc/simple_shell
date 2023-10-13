@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * print_env - print all the environment variables
+ * @env: a pointer to all the environment variables
+ *
+ * Return: 0 on success
+ */
 int print_env(char **env)
 {
 	int i = 0;

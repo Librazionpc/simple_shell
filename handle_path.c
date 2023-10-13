@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 char *get_path(char *command);
-char *concat_string(char *first, char *second);
 
 /**
  * get_full_path - compute the full path of a command
@@ -57,7 +56,7 @@ char *get_path(char *command)
 	path = split_to_string(result, ':');
 	while (path[i] != NULL)
 	{
-		full_path = concat_string(path[i], command);
+		full_path = concat_string(path[i], command, '/');
 		if (stat(full_path, &file_stats) == 0)
 		{
 			free_2d_arrays(path);
@@ -81,7 +80,7 @@ char *get_path(char *command)
  *
  * Return: the concatinated string
  */
-char *concat_string(char *first, char *second)
+char *concat_string(char *first, char *second, char dil)
 {
 	int len_first = 0;
 	int len_second = 0;
@@ -102,7 +101,7 @@ char *concat_string(char *first, char *second)
 		concated_string[i] = first[l];
 		i++;
 	}
-	concated_string[i] = '/';
+	concated_string[i] = dil;
 	i++;
 	for (l = 0; l < len_second; l++)
 	{
@@ -113,4 +112,3 @@ char *concat_string(char *first, char *second)
 	return (concated_string);
 
 }
-

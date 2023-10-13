@@ -13,19 +13,31 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
+typedef struct environment {
+	char *variable;
+	struct environment *next;
+} environment;
+
+environment *init_env(char **);
+environment *add_list_end(environment **, char *);
+int print_list(environment *);
+int number_of_list(environment *);
+void free_list(environment *);
+char **convert_list_to_string(environment *);
 char *prompt(void);
 void removeLeadingSpaces(char *command);
-int shell_processor(char *cmd, char *progName, int progRuns, char *evnp[], int exit_code);
-char **string_manipulation(char *command);
-char *string_manipulation2(char *command);
+int shell_processor(char *cmd, char *progName, int progRuns, environment *evnp, int exit_code);
 void free_2d_arrays(char **args);
 char *handle_path(void);
 char *handle_evnp(char *argv[]);
-char *args_exist_in_path(char *path_buf, char **args, char *progName, int run);
-int perform_args(char *path_needed, char **args, char *evnp[]);
+int perform_args(char *path_needed, char **args,  environment *evnp);
 char **split_to_string(char *string, char dil);
 char *get_full_path(char *command);
 void _fprintf(int, const char *, ...);
 int print_env(char **env);
-
+char *int_to_string(int n);
+int _atoi(char *string);
+int _exit_prog(char **argv, int exit_status, environment *env, char *prog_name,
+		int no_runs, char *command);
+char *concat_string(char *first, char *second, char dil);
 #endif

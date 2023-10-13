@@ -2,7 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "main.h"
- 
+
+/**
+ * count_words - computer the number of words in a string
+ * @string: the string to compute
+ * @dil: the dilemeter
+ *
+ * Return: the number of words computed
+ */
 int count_words(char *string, char dil)
 {
 	int no_of_words = 0;
@@ -13,13 +20,20 @@ int count_words(char *string, char dil)
 		no_of_words++;
 	while (*string != '\0')
 	{
-		if (*string == dil && *(string + 1) != dil)
+		if (*string == dil && (*(string + 1) != dil && *(string + 1) != '\0'))
 			no_of_words++;
 		string++;
 	}
 	return (no_of_words);
 }
 
+/**
+ * lenght_of_word - compute the lenght of each word
+ * @string: the string to compute it lenght
+ * @dil: the dilemeter
+ *
+ * Return: the lenght of the word before dilemeter
+ */
 int lenght_of_word(char *string, char dil)
 {
 	int lenght = 0;
@@ -34,6 +48,14 @@ int lenght_of_word(char *string, char dil)
 	return (lenght);
 }
 
+/**
+ * copy_word_to_buffer - copy strings to buffer
+ * @string: a pointer to the string
+ * @lenght: the lenght of the string
+ * @dil: the delimeter
+ *
+ * Return: the buffer
+ */
 char *copy_word_to_buffer(char **string, int lenght, char dil)
 {
 	int i = 0;
@@ -50,6 +72,13 @@ char *copy_word_to_buffer(char **string, int lenght, char dil)
 	return (buffer);
 }
 
+/**
+ * split_to_string - split a string to words using delimeter
+ * @string: the string to split
+ * @dil: the delimeter
+ *
+ * Return: an array of strings if sucess otherwise return NULL
+ */
 char **split_to_string(char *string, char dil)
 {
 	char **string_array, *buffer;
@@ -84,15 +113,22 @@ char **split_to_string(char *string, char dil)
 	return (string_array);
 }
 
-void free_array_of_strings(char **array_of_strings)
+/**
+ * free_2d_arrays - free array of strings
+ * @arrays: a pointer to the array of strings
+ *
+ * Return: nothing
+ */
+void free_2d_arrays(char **arrays)
 {
 	int i = 0;
-	while (array_of_strings[i] != NULL)
+
+	if (arrays == NULL)
+		return;
+	while (arrays[i] != NULL)
 	{
-		printf("free memory\n");
-		free(array_of_strings[i]);
+		free(arrays[i]);
 		i++;
 	}
-	free(array_of_strings);
+	free(arrays);
 }
-

@@ -5,7 +5,7 @@ char *int_to_string(int n);
 /**
  * _fprintf - print formated string to std file
  * @stream: the file stream to write to
- * @format: the string to write
+ * @string: the string to write
  *
  * return: nothing
  */
@@ -13,8 +13,12 @@ void _fprintf(int stream, const char *string, ...)
 {
 	va_list args;
 	int i = 0, k = 0;
-	char buffer[250], *value;
+	char *buffer, *value;
+	int buffer_size = 250;
 
+	buffer = (char *)malloc(sizeof(char) * buffer_size);
+	if (buffer == NULL)
+		return;
 	va_start(args, string);
 	while (*string != '\0')
 	{
@@ -26,6 +30,11 @@ void _fprintf(int stream, const char *string, ...)
 				value  = va_arg(args, char *);
 				for (k = 0; value[k] != '\0'; k++)
 				{
+					if (i >= buffer_size)
+					{
+						buffer_size *= 2;
+						buffer = (char *)realloc(buffer, (sizeof(char) * buffer_size));
+					}
 					buffer[i] = value[k];
 					i++;
 				}
@@ -35,9 +44,15 @@ void _fprintf(int stream, const char *string, ...)
 				value = int_to_string(va_arg(args, int));
 				for (k = 0; value[k] != '\0'; k++)
 				{
+					if (i >= buffer_size)
+					{
+						buffer_size *= 2;
+						buffer = (char *)realloc(buffer, (sizeof(char) * buffer_size));
+					}
 					buffer[i] = value[k];
 					i++;
 				}
+				free(value);
 
 			}
 		}
@@ -48,17 +63,23 @@ void _fprintf(int stream, const char *string, ...)
 		}
 		string++;
 	}
-	free(value);
 	va_end(args);
 	buffer[i]  = '\0';
 	write(stream, buffer, i);
+	free(buffer);
 }
 
-
+/**
+ * int_to_string - convert int to string
+ * @n: the integer to convert
+ *
+ * Return: the string
+ */
 char *int_to_string(int n)
 {
 	int mul = 1, lenght = 1, is_negative = 0, i = 0;
 	char *string = NULL;
+
 	if (n < 0)
 	{
 		lenght++;
