@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * init_env - initialize the environment variables
+ * to linked list
+ * @env: a pointer to the environment variable
+ *
+ * Return: the initialized environment variables
+ */
 environment *init_env(char **env)
 {
 	int i = 0;
@@ -16,10 +23,17 @@ environment *init_env(char **env)
 	return (head);
 }
 
+/**
+ * add_list_end - add a new entry to the end of a linked list
+ * @head: a pointer to the head of environment linked list
+ * @string: the string to add
+ *
+ * Return: the head of the linked list
+ */
 environment *add_list_end(environment **head, char *string)
 {
 	environment *new_node, *tmp;
-	
+
 	new_node = (environment *)malloc(sizeof(environment) * 1);
 	if (new_node == NULL)
 		return (NULL);
@@ -34,17 +48,23 @@ environment *add_list_end(environment **head, char *string)
 		tmp = *head;
 		while (tmp->next != NULL)
 			tmp = tmp->next;
-		tmp->next = new_node; 
+		tmp->next = new_node;
 	}
 	return (*head);
 }
 
+/**
+ * print_list - print all the entries in the linked list
+ * @head: the head of the linked list
+ *
+ * Return: 0 on sucess otherwise return 2
+ */
 int print_list(environment *head)
 {
 	environment *tmp;
 
 	if (head == NULL)
-		return(0);
+		return (0);
 	tmp = head;
 	while (tmp != NULL)
 	{
@@ -53,17 +73,13 @@ int print_list(environment *head)
 	}
 	return (0);
 }
-int number_of_list(environment *head)
-{
-	int lenght_of_list = 0;
-	
-	while (head != NULL)
-	{
-		lenght_of_list++;
-		head = head->next;
-	}
-	return (lenght_of_list);
-}
+
+/**
+ * free_list - free a linked list
+ * @head: the head of the linked list
+ *
+ * Return: nothing
+ */
 void free_list(environment *head)
 {
 	environment *tmp, *pre_env;
@@ -71,15 +87,22 @@ void free_list(environment *head)
 	if (head == NULL)
 		return;
 	tmp = head;
-       while (tmp != NULL)
-       {
-	       pre_env = tmp;
-	       tmp = tmp->next;
-	       free(pre_env->variable);
-	       free(pre_env);
+	while (tmp != NULL)
+	{
+		pre_env = tmp;
+		tmp = tmp->next;
+		free(pre_env->variable);
+		free(pre_env);
 	}
 }
 
+/**
+ * convert_list_to_string - convert linked list data structure to
+ * array of strings
+ * @head: the head of the linked list
+ *
+ * Return: the pointer to the array of strings
+ */
 char **convert_list_to_string(environment *head)
 {
 	char **strings;

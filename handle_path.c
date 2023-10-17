@@ -77,6 +77,7 @@ char *get_path(char *command)
  * concat_string - concatinate two  strigns
  * @first: first string
  * @second: second string
+ * @dil: delimeter to seperate first from second
  *
  * Return: the concatinated string
  */

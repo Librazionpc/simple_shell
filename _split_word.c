@@ -56,17 +56,17 @@ int lenght_of_word(char *string, char dil)
  *
  * Return: the buffer
  */
-char *copy_word_to_buffer(char **string, int lenght, char dil)
+char *copy_word_to_buffer(char *string, int lenght, char dil)
 {
 	int i = 0;
 
 	char *buffer = (char *)malloc(sizeof(char) * (lenght + 1));
 
-	while (**string != dil && **string != '\0')
+	while (*string != dil && *string != '\0')
 	{
-		*(buffer + i) = **string;
+		*(buffer + i) = *string;
 		i++;
-		*string += 1;
+		string += 1;
 	}
 	buffer[i] = '\0';
 	return (buffer);
@@ -101,7 +101,7 @@ char **split_to_string(char *string, char dil)
 			if (*string == dil)
 				string++;
 			lenght_of_words = lenght_of_word(string, dil);
-			buffer = copy_word_to_buffer(&string, lenght_of_words, dil);
+			buffer = copy_word_to_buffer(string, lenght_of_words, dil);
 			string_array[i] = buffer;
 			i++;
 		}

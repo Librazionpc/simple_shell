@@ -46,11 +46,12 @@ int run_command(char **args, environment *env, int no_runs, char *program_name)
  * @no_runs: Sum of the parent arrays of argv from main
  * @evnp: a pointer to all the environment variables
  * @exit_code: the value the previous command return with
+ * @alias: a pointer to the head of the alias linked list
  *
  * Return: Null to the main funtion to cause continuation
  */
 int shell_processor(char *command, char *progName, int no_runs,
-		environment *evnp, int exit_code)
+		environment *evnp, int exit_code, environment **alias)
 {
 	char **args = NULL;
 	int exit_status = 0;
@@ -60,13 +61,24 @@ int shell_processor(char *command, char *progName, int no_runs,
 		return (exit_status);
 	if (*args != NULL)
 	{
+		check_alias(*alias, &args[0]);
 		if (strcmp(args[0], "exit") == 0)
 		{
-			exit_status = _exit_prog(args, exit_code, evnp, progName, no_runs, command);
+			exit_status = _exit_prog(args, exit_code, evnp,
+					*alias, progName, no_runs, command);
 		}
 		else if (strcmp(args[0], "env") == 0)
 		{
 			exit_status = print_list(evnp);
+			free_2d_arrays(args);
+		}
+		else if (strcmp(args[0], "setenv") == 0)
+			exit_status = set_env(args, evnp, progName, no_runs);
+		else if (strcmp(args[0], "unsetenv") == 0)
+			exit_status = unset_env(evnp, args, progName, no_runs);
+		else if (strcmp(args[0], "alias") == 0)
+		{
+			exit_status = alias_function(args, alias);
 			free_2d_arrays(args);
 		}
 		else

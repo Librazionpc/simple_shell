@@ -12,8 +12,8 @@ int count_argv(char **argv)
 
 	while (*argv != NULL)
 	{
-	       no_of_args++;
-	       argv++;
+		no_of_args++;
+		argv++;
 	}
 	return (no_of_args);
 }
@@ -22,13 +22,16 @@ int count_argv(char **argv)
  * _exit - exit the program with an exit status
  * @argv: a pointerto the args
  * @exit_status: the exit_status to exit with
+ * @env: the head of the environment variable
+ * @alias: the head of the alias variable
  * @prog_name: the name of the shell program
+ * @no_run: the number of times the shell program has run
  * @command: the initial command
  *
  * Return: nothing
  */
 int _exit_prog(char **argv, int exit_status, environment *env,
-		char *prog_name, int no_run, char *command)
+		environment *alias, char *prog_name, int no_run, char *command)
 {
 	int no_of_args = 0;
 
@@ -38,6 +41,7 @@ int _exit_prog(char **argv, int exit_status, environment *env,
 		free(command);
 		free_2d_arrays(argv);
 		free_list(env);
+		free_list(alias);
 		exit(exit_status);
 	}
 	if (no_of_args == 2)
@@ -53,6 +57,7 @@ int _exit_prog(char **argv, int exit_status, environment *env,
 		free(command);
 		free_2d_arrays(argv);
 		free_list(env);
+		free_list(alias);
 		exit(exit_status);
 	}
 	else
