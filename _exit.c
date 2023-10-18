@@ -52,7 +52,7 @@ int _exit_prog(char **argv, int exit_status, environment *env,
 			_fprintf(STDERR_FILENO, "%s: %d: exit: Illegal number: %s\n",
 				prog_name, no_run, argv[1]);
 			free_2d_arrays(argv);
-			return (2);
+			exit(2);
 		}
 		free(command);
 		free_2d_arrays(argv);
@@ -63,7 +63,7 @@ int _exit_prog(char **argv, int exit_status, environment *env,
 	else
 	{
 		_fprintf(STDERR_FILENO, "Usage: exit exit_status");
-		return (2);
+		exit(2);
 	}
 }
 

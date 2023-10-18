@@ -68,19 +68,15 @@ int shell_processor(char *command, char *progName, int no_runs,
 					*alias, progName, no_runs, command);
 		}
 		else if (strcmp(args[0], "env") == 0)
-		{
 			exit_status = print_list(evnp);
-			free_2d_arrays(args);
-		}
+		else if (strcmp(args[0], "cd") == 0)
+			change_directory(args, progName, no_runs);
 		else if (strcmp(args[0], "setenv") == 0)
 			exit_status = set_env(args, evnp, progName, no_runs);
 		else if (strcmp(args[0], "unsetenv") == 0)
 			exit_status = unset_env(evnp, args, progName, no_runs);
 		else if (strcmp(args[0], "alias") == 0)
-		{
 			exit_status = alias_function(args, alias);
-			free_2d_arrays(args);
-		}
 		else
 		{
 			exit_status = run_command(args, evnp, no_runs, progName);
@@ -88,5 +84,6 @@ int shell_processor(char *command, char *progName, int no_runs,
 		}
 
 	}
+	free_2d_arrays(args);
 	return (exit_status);
 }
