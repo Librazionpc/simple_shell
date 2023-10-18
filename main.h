@@ -14,7 +14,13 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-typedef struct environment {
+/**
+ * struct environment - a linked list for environment variables
+ * @variable: a pointer to the variables
+ * @next: a pointer to the next node
+ */
+typedef struct environment
+{
 	char *variable;
 	struct environment *next;
 } environment;
@@ -28,7 +34,8 @@ void free_list(environment *);
 char **convert_list_to_string(environment *);
 char *prompt(environment *, environment *, int exit, int fd);
 void removeLeadingSpaces(char *command);
-int shell_processor(char *cmd, char *progName, int progRuns, environment *evnp, int exit_code, environment **alias);
+int shell_processor(char *cmd, char *progName, int progRuns,
+		environment *evnp, int exit_code, environment **alias);
 void free_2d_arrays(char **args);
 char *fileio(char **argv, int *fd, int argc, int exit_status, int program_runs,
 		environment *, environment*);
@@ -45,7 +52,8 @@ int print_env(char **env);
 char *int_to_string(int n);
 int _atoi(char *string);
 void change_directory(char **args, char *progName, int run);
-int _exit_prog(char **argv, int exit_status, environment *env, environment *alias, char *prog_name,
+int _exit_prog(char **argv, int exit_status, environment *env,
+		environment *alias, char *prog_name,
 		int no_runs, char *command);
 char *concat_string(char *first, char *second, char dil);
 int count_argv(char **argv);
