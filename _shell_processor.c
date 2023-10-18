@@ -21,6 +21,12 @@ int shell_processor(char *command, char *progName,
 	{
 		return (exit_status);
 	}
+	if (strcmp(args[0], "env") == 0)
+	{
+		exit_status = print_hsh_envp(envp);
+		free_2d_arrays(args);
+		return (exit_status);
+	}
 	path_needed = menu(args, progName, no_runs, exit_status);
 	if (path_needed == NULL)
 	{
