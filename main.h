@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+
 /**
  * struct ListOfPath - Linked list if the path
  * @directory: the paths
