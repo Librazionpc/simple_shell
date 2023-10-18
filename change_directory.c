@@ -12,7 +12,8 @@
 void change_directory(char **args, char *progName, int run);
 void change_directory(char **args, char *progName, int run)
 {
-	char *current_pwd = NULL, *new_pwd, *old_pwd, *dir_needed;
+	char *current_pwd = NULL, *new_pwd = NULL;
+	char *old_pwd = NULL, *dir_needed = NULL;
 	size_t new_pwd_size;
 
 	current_pwd = getcwd(NULL, 0);
@@ -33,15 +34,18 @@ void change_directory(char **args, char *progName, int run)
 	{
 		dir_needed = getenv("OLDPWD");
 		old_pwd = getcwd(NULL, 0);
-		if (chdir(dir_needed) == 0)
+		if (dir_needed != NULL)
 		{
-			getcwd(dir_needed, 100);
-			setenv("PWD", dir_needed, 1);
-			setenv("OLDPWD", old_pwd, 1);
-			printf("%s\n", getenv("PWD"));
-			free(old_pwd);
-			free(current_pwd);
-			return;
+			if (chdir(dir_needed) == 0)
+			{
+				getcwd(dir_needed, 100);
+				setenv("PWD", dir_needed, 1);
+				setenv("OLDPWD", old_pwd, 1);
+				printf("%s\n", getenv("PWD"));
+				free(old_pwd);
+				free(current_pwd);
+				return;
+			}
 		}
 		else
 		{
@@ -54,7 +58,7 @@ void change_directory(char **args, char *progName, int run)
 	else if (*args[1] != '/')
 	{
 		new_pwd_size = strlen(current_pwd) + strlen(args[1]) + 2;
-		new_pwd = malloc(new_pwd_size);
+		new_pwd = (char *)malloc(new_pwd_size);
 		if (new_pwd == NULL)
 		{
 			free(current_pwd);
@@ -67,8 +71,12 @@ void change_directory(char **args, char *progName, int run)
 			setenv("PWD", new_pwd, 1);
 		}
 		else
+		{
 			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName,
 					run, args[0], args[1]);
+			free(current_pwd);
+			return;
+		}
 		free(new_pwd);
 	}
 	else if (*args[1] == '/')
