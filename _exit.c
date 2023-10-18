@@ -62,7 +62,7 @@ int _exit_prog(char **argv, int exit_status, environment *env,
 	else
 	{
 		_fprintf(STDERR_FILENO, "Usage: exit exit_status");
-		return(2);
+		return (2);
 	}
 }
 
