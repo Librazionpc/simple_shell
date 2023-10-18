@@ -36,7 +36,7 @@ void free_2d_arrays(char **args);
 int free_linked_list(ListOfPath *path_needed);
 ListOfPath *createLinkedListOfPath();
 char **envp_vars();
-int print_hsh_envp(char *envp[]);
+int print_hsh_envp();
 char *args_exist_in_path(ListOfPath *path_list, char **args);
 int perform_args(char *path_needed, char **args, char *evnp[]);
 #endif
