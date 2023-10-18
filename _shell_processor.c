@@ -51,6 +51,8 @@ int run_command(char **args, environment *env, int no_runs, char *program_name)
  * Return: Null to the main funtion to cause continuation
  */
 int shell_processor(char *command, char *progName, int no_runs,
+	environment *evnp, int exit_code, environment **alias);
+int shell_processor(char *command, char *progName, int no_runs,
 		environment *evnp, int exit_code, environment **alias)
 {
 	char **args = NULL;
@@ -72,6 +74,11 @@ int shell_processor(char *command, char *progName, int no_runs,
 			exit_status = print_list(evnp);
 			free_2d_arrays(args);
 		}
+		else if (strcmp(args[0], "cd") == 0)
+		{
+			change_directory(args, progName, no_runs);
+			free_2d_arrays(args);
+		}
 		else if (strcmp(args[0], "setenv") == 0)
 			exit_status = set_env(args, evnp, progName, no_runs);
 		else if (strcmp(args[0], "unsetenv") == 0)
@@ -86,7 +93,6 @@ int shell_processor(char *command, char *progName, int no_runs,
 			exit_status = run_command(args, evnp, no_runs, progName);
 			return (exit_status);
 		}
-
 	}
 	return (exit_status);
 }

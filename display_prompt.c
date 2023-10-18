@@ -3,28 +3,28 @@
 /**
  * prompt - Function that prompt the user
  *
+ * @exit_status: Status code
+ * @fd: file_descriptor
  * Return: The command to be executed
  */
 
-char *prompt(void)
+char *prompt(int exit_status, int fd)
 {
 	char *command = NULL;
 	size_t len = 0;
 	ssize_t bytes_read, bytes_written;
 
-	if (isatty(0))
+	if (isatty(0) && fd == 0)
 		bytes_written = write(STDIN_FILENO, "$", 1);
 	if (bytes_written == -1)
 	{
-		printf("Nah me %s\n", command);
-		free(command);
 		return (NULL);
 	}
-	bytes_read = getline(&command, &len, stdin);
+	bytes_read = _getline(&command, &len, fd);
 	if (bytes_read <= 0)
 	{
 		free(command);
-		return (NULL);
+		exit(exit_status);
 	}
 
 	if (command[bytes_read - 1] == '\n')
