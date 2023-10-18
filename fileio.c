@@ -7,6 +7,8 @@
  * @argc: no of args from command line
  * @exit_status: The exit code
  * @program_runs: The how many time main called prompt
+ * @env_cmp: the head to the environment variable
+ * @alias: the head to the alias linked list
  *
  * Return: The command needed
  */

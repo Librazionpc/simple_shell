@@ -2,6 +2,10 @@
 
 /**
  * prompt - Function that prompt the user
+ * @env_cmp: the head to the environment variable
+ * @alias: the head to the alias linked list
+ * @exit_status: the exit_status of the previous command
+ * @fd: the file descriptor of the file opened
  *
  * Return: The command to be executed
  */
