@@ -36,8 +36,10 @@ void change_directory(char **args, char *progName, int run)
 		old_pwd = getcwd(NULL, 0);
 		if (dir_needed != NULL)
 		{
+			printf("%s     %s\n", dir_needed, old_pwd);
 			if (chdir(dir_needed) == 0)
 			{
+				printf("%s     %s\n", dir_needed, old_pwd);
 				getcwd(dir_needed, 100);
 				setenv("PWD", dir_needed, 1);
 				setenv("OLDPWD", old_pwd, 1);
