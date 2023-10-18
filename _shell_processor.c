@@ -57,11 +57,11 @@ int shell_processor(char *command, char *progName, int no_runs,
 	int exit_status = 0;
 
 	args  = split_to_string(command, ' ');
-	handle_expansion(args, exit_code, evnp);
 	if (args == NULL)
 		return (exit_status);
 	if (*args != NULL)
 	{
+		handle_expansion(args, exit_code, evnp);
 		check_alias(*alias, &args[0]);
 		if (strcmp(args[0], "exit") == 0)
 		{
