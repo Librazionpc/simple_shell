@@ -1,3 +1,13 @@
 #!/bin/bash
 echo i am good
+ls
+pwd
+clear
+which ls
+which which 
+      
+
+top
+ps
+hhshtht
 

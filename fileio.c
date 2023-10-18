@@ -31,6 +31,8 @@ char *fileio(char **argv, int *fd, int argc, int exit_status, int program_runs,
 		{
 			fprintf(stderr, "%s: %d: cannot open %s: No such file\n",
 					argv[0], program_runs, argv[1]);
+			free_list(alias);
+			free_list(env_cmp);
 			exit(2);
 		}
 	}
