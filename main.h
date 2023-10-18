@@ -13,62 +13,28 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-
-
 /**
- * struct environment - A structure to represent environment variables.
- *
- * @variable: The name of the environment variable.
- * @next: A pointer to the next environment variable in the list.
+ * struct ListOfPath - Linked list if the path
+ * @directory: the paths
+ * @next: the next node
  */
-typedef struct environment
-{
-	char *variable;
-	struct environment *next;
-} environment;
 
-environment *init_env(char **);
-environment *add_list_end(environment **, char *);
-environment *search_env(environment *env, char *variable, char dil);
-int print_list(environment *);
-int number_of_list(environment *);
-void free_list(environment *);
-char **convert_list_to_string(environment *);
-char *prompt(int exit_status, int fd);
-void removeLeadingSpaces(char *command);
-int shell_processor(char *cmd, char *progName, int progRuns,
-		environment *evnp, int exit_code, environment **alias);
+typedef struct ListOfPath
+{
+	char *directory;
+	struct ListOfPath *next;
+} ListOfPath;
+int main(int argc, char *argv[], char *evnp[]);
+char *prompt(int exit_status);
+int shell_processor(char *command, char *progName, int no_runs, 
+		char *envp[], int exit_status);
+void removeLeadingSpaces(char *str);
+char **string_manipulation(char *command);
+char *menu(char **args, char *progName, int run, int exit_status);
+void add_directory_to_list(ListOfPath **head, const char *directory);
 void free_2d_arrays(char **args);
-char *handle_path(void);
-char *handle_evnp(char *argv[]);
-int perform_args(char *path_needed, char **args,  environment *evnp);
-int lenght_of_word(char *string, char dil);
-char *copy_word_to_buffer(char *string, int lenght, char dil);
-char **split_to_string(char *string, char dil);
-char *get_full_path(char *command);
-void _fprintf(int, const char *, ...);
-int print_env(char **env);
-char *int_to_string(int n);
-int _atoi(char *string);
-int _exit_prog(char **argv, int exit_status, environment *env,
-		environment *alias, char *prog_name,
-		int no_runs, char *command);
-char *concat_string(char *first, char *second, char dil);
-ssize_t _getline(char **lineptr, size_t *n, int fd);
-int count_argv(char **argv);
-int set_env(char **argv, environment *env, char *prog_name, int no_runs);
-int unset_env(environment *env, char **argv, char *prog_name, int no_runs);
-int alias_function(char **argv, environment **alias);
-void check_alias(environment *alias, char **command);
-environment **init_alias();
-char *fileio(char **argv, int *fd, int argc, int exit_status, int runs);
-int logical_args(char *, char *, int, environment *, environment **);
-int is_present(char *, char *);
-int execute_in_seq(char *, char *, int, environment *, int, environment **);
-void handle_comment(char *);
-void handle_expansion(char **, int, environment *);
-int number_of_list(environment *head);
-void change_directory(char **args, char *progName, int run);
-void change_directory2(char **args, char *current_pwd,
-		char *progName, int run);
+int free_linked_list(ListOfPath *path_needed);
+ListOfPath *createLinkedListOfPath();
+char *args_exist_in_path(ListOfPath *path_list, char **args);
+int perform_args(char *path_needed, char **args, char *evnp[]);
 #endif
