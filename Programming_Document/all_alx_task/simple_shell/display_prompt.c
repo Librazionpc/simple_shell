@@ -16,7 +16,7 @@ char *prompt(int exit_status)
 		bytes_written = write(STDIN_FILENO, "$", 1);
 	if (bytes_written == -1)
 		return (NULL);
-	bytes_read = getline(&command, &len, stdin);
+	bytes_read = _getline(&command, &len, 1);
 	if (bytes_read <= 0)
 	{
 		free(command);

@@ -33,6 +33,7 @@ char **string_manipulation(char *command);
 char *menu(char **args, char *progName, int run, int exit_status);
 void add_directory_to_list(ListOfPath **head, const char *directory);
 void free_2d_arrays(char **args);
+ssize_t _getline(char **lineptr, size_t *n, int fd);
 int free_linked_list(ListOfPath *path_needed);
 ListOfPath *createLinkedListOfPath();
 char *args_exist_in_path(ListOfPath *path_list, char **args);
