@@ -50,6 +50,7 @@ char *get_full_path(char *command);
 void _fprintf(int, const char *, ...);
 int print_env(char **env);
 char *int_to_string(int n);
+void handle_expansion(char **, int, environment *);
 int _atoi(char *string);
 void change_directory(char **args, char *progName, int run);
 int _exit_prog(char **argv, int exit_status, environment *env,
@@ -66,6 +67,5 @@ int logical_args(char *, char *, int, environment *, environment **);
 int is_present(char *, char *);
 int execute_in_seq(char *, char *, int, environment *, int, environment **);
 void handle_comment(char *);
-void handle_expansion(char **, int, environment *);
 int number_of_list(environment *head);
 #endif
