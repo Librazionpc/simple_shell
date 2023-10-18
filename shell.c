@@ -19,7 +19,7 @@ int main(int argc, char *argv[], char *evnp[])
 	{
 		while (1)
 		{
-			cmd = prompt();
+			cmd = prompt(env_cmp, alias);
 			if (cmd != NULL)
 				handle_comment(cmd);
 			program_runs++;

@@ -6,7 +6,7 @@
  * Return: The command to be executed
  */
 
-char *prompt(void)
+char *prompt(environment *env_cmp, environment *alias)
 {
 	char *command = NULL;
 	size_t len = 0;
@@ -16,15 +16,17 @@ char *prompt(void)
 		bytes_written = write(STDIN_FILENO, "$", 1);
 	if (bytes_written == -1)
 	{
-		printf("Nah me %s\n", command);
 		free(command);
-		return (NULL);
+		exit(EXIT_SUCCESS);
 	}
 	bytes_read = getline(&command, &len, stdin);
 	if (bytes_read <= 0)
 	{
 		free(command);
-		return (NULL);
+		printf("testing\n");
+		free_list(alias);
+		free_list(env_cmp);
+		exit(EXIT_SUCCESS);
 	}
 
 	if (command[bytes_read - 1] == '\n')
