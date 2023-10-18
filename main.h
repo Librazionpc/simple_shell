@@ -14,7 +14,15 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-typedef struct environment {
+
+/**
+ * struct environment - A structure to represent environment variables.
+ *
+ * @variable: The name of the environment variable.
+ * @next: A pointer to the next environment variable in the list.
+ */
+typedef struct environment
+{
 	char *variable;
 	struct environment *next;
 } environment;
@@ -28,7 +36,8 @@ void free_list(environment *);
 char **convert_list_to_string(environment *);
 char *prompt(int exit_status, int fd);
 void removeLeadingSpaces(char *command);
-int shell_processor(char *cmd, char *progName, int progRuns, environment *evnp, int exit_code, environment **alias);
+int shell_processor(char *cmd, char *progName, int progRuns,
+		environment *evnp, int exit_code, environment **alias);
 void free_2d_arrays(char **args);
 char *handle_path(void);
 char *handle_evnp(char *argv[]);
@@ -41,7 +50,8 @@ void _fprintf(int, const char *, ...);
 int print_env(char **env);
 char *int_to_string(int n);
 int _atoi(char *string);
-int _exit_prog(char **argv, int exit_status, environment *env, environment *alias, char *prog_name,
+int _exit_prog(char **argv, int exit_status, environment *env,
+		environment *alias, char *prog_name,
 		int no_runs, char *command);
 char *concat_string(char *first, char *second, char dil);
 ssize_t _getline(char **lineptr, size_t *n, int fd);
@@ -59,5 +69,6 @@ void handle_comment(char *);
 void handle_expansion(char **, int, environment *);
 int number_of_list(environment *head);
 void change_directory(char **args, char *progName, int run);
-void change_directory2(char **args, char *current_pwd, char *progName, int run);
+void change_directory2(char **args, char *current_pwd,
+		char *progName, int run);
 #endif
