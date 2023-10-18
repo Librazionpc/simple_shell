@@ -12,7 +12,8 @@
 void change_directory(char **args, char *progName, int run);
 void change_directory(char **args, char *progName, int run)
 {
-	char *current_pwd = NULL, *new_pwd, *old_pwd, *dir_needed;
+	char *current_pwd = NULL, *new_pwd = NULL;
+	char *old_pwd = NULL, *dir_needed = NULL;
 	size_t new_pwd_size;
 
 	current_pwd = getcwd(NULL, 0);
@@ -54,7 +55,7 @@ void change_directory(char **args, char *progName, int run)
 	else if (*args[1] != '/')
 	{
 		new_pwd_size = strlen(current_pwd) + strlen(args[1]) + 2;
-		new_pwd = malloc(new_pwd_size);
+		new_pwd = (char *)malloc(new_pwd_size);
 		if (new_pwd == NULL)
 		{
 			free(current_pwd);
