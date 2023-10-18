@@ -23,7 +23,6 @@ char *prompt(environment *env_cmp, environment *alias)
 	if (bytes_read <= 0)
 	{
 		free(command);
-		printf("testing\n");
 		free_list(alias);
 		free_list(env_cmp);
 		exit(EXIT_SUCCESS);
