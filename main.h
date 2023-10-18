@@ -25,7 +25,7 @@ int print_list(environment *);
 int number_of_list(environment *);
 void free_list(environment *);
 char **convert_list_to_string(environment *);
-char *prompt(environment *, environment *);
+char *prompt(environment *, environment *, int );
 void removeLeadingSpaces(char *command);
 int shell_processor(char *cmd, char *progName, int progRuns, environment *evnp, int exit_code, environment **alias);
 void free_2d_arrays(char **args);

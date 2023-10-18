@@ -6,7 +6,7 @@
  * Return: The command to be executed
  */
 
-char *prompt(environment *env_cmp, environment *alias)
+char *prompt(environment *env_cmp, environment *alias, int exit_status)
 {
 	char *command = NULL;
 	size_t len = 0;
@@ -17,7 +17,7 @@ char *prompt(environment *env_cmp, environment *alias)
 	if (bytes_written == -1)
 	{
 		free(command);
-		exit(EXIT_SUCCESS);
+		exit(exit_status);
 	}
 	bytes_read = getline(&command, &len, stdin);
 	if (bytes_read <= 0)
