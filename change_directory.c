@@ -13,7 +13,7 @@ void change_directory(char **args, char *progName, int run);
 void change_directory(char **args, char *progName, int run)
 {
 	char *current_pwd = NULL, *new_pwd = NULL;
-	char *old_pwd = NULL, *dir_needed = NULL;
+	char *old_pwd = NULL, *dir_needed = NULL, *nxt_dir = NULL;
 	size_t new_pwd_size;
 
 	current_pwd = getcwd(NULL, 0);
@@ -33,18 +33,21 @@ void change_directory(char **args, char *progName, int run)
 	else if (strcmp(args[0], "cd") == 0 && strcmp(args[1], "-") == 0)
 	{
 		dir_needed = getenv("OLDPWD");
-		old_pwd = getcwd(NULL, 0);
+		old_pwd = getenv("PWD");
 		if (dir_needed != NULL)
 		{
-			printf("%s     %s\n", dir_needed, old_pwd);
 			if (chdir(dir_needed) == 0)
 			{
-				printf("%s     %s\n", dir_needed, old_pwd);
-				getcwd(dir_needed, 100);
-				setenv("PWD", dir_needed, 1);
+				nxt_dir = getcwd(NULL, 0);
+				if (nxt_dir == NULL)
+				{
+					free(current_pwd);
+					return;
+				}
+				setenv("PWD", nxt_dir, 1);
 				setenv("OLDPWD", old_pwd, 1);
-				printf("%s\n", getenv("PWD"));
-				free(old_pwd);
+				printf("%s\n", dir_needed);
+				free(nxt_dir);
 				free(current_pwd);
 				return;
 			}
@@ -52,7 +55,6 @@ void change_directory(char **args, char *progName, int run)
 		else
 		{
 			printf("%s\n", old_pwd);
-			free(old_pwd);
 			free(current_pwd);
 			return;
 		}
