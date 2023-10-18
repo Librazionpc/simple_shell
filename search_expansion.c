@@ -5,6 +5,7 @@ char *int_string(int);
  * handle_expansion - replace $ sign with appropriate value
  * @argv: an array of strings
  * @exit_status: the exit status of the previous command
+ * @env: the head pointer to the environment variables
  *
  * Return: nothing
  */
