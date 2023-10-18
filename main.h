@@ -26,7 +26,7 @@ typedef struct ListOfPath
 	struct ListOfPath *next;
 } ListOfPath;
 int main(int argc, char *argv[], char *evnp[]);
-char *prompt(int exit_status);
+char *prompt(int exit_status, int fd);
 int shell_processor(char *command, char *progName, int no_runs, 
 		char *envp[], int exit_status);
 void removeLeadingSpaces(char *str);
@@ -35,6 +35,7 @@ char *menu(char **args, char *progName, int run, int exit_status);
 void add_directory_to_list(ListOfPath **head, const char *directory);
 void free_2d_arrays(char **args);
 int free_linked_list(ListOfPath *path_needed);
+ssize_t _getline(char **lineptr, size_t *n, int fd);
 ListOfPath *createLinkedListOfPath();
 char *args_exist_in_path(ListOfPath *path_list, char **args);
 int perform_args(char *path_needed, char **args, char *evnp[]);

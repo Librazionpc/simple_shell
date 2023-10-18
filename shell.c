@@ -16,7 +16,7 @@ int main(int argc, char *argv[], char *evnp[])
 	{
 		if (argc == 1)
 		{
-			cmd = prompt(exit_status);
+			cmd = prompt(exit_status, 0);
 		}
 		program_runs++;
 		if (isatty(0) == 0)
