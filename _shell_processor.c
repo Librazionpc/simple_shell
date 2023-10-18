@@ -23,7 +23,7 @@ int shell_processor(char *command, char *progName,
 	}
 	if (strcmp(args[0], "env") == 0)
 	{
-		exit_status = print_hsh_envp();
+		exit_status = print_hsh_envp(envp);
 		free_2d_arrays(args);
 		return (exit_status);
 	}

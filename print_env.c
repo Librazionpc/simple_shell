@@ -8,7 +8,7 @@
  *
  */
 
-int print_hsh_envp()
+int print_hsh_envp(char *envp[])
 {
 	int i;
 	char *env_val = NULL;
@@ -23,6 +23,11 @@ int print_hsh_envp()
 			if (env_val != NULL)
 				printf("%s=%s\n", hsh_vars[i], env_val);
 		}
+	}
+	if (env_val == NULL)
+	{
+		for (i = 0; envp[i] != NULL; i++)
+			printf("%s\n", envp[i]);
 	}
 	return 0;
 }
