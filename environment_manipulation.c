@@ -78,14 +78,12 @@ int set_env(char **argv, environment *env, char *prog_name, int no_runs)
 	if (no_of_args == 3)
 	{
 		exit_status = add_env(env, argv[1], argv[2]);
-		free_2d_arrays(argv);
 		return (exit_status);
 	}
 	else
 	{
 		_fprintf(STDERR_FILENO, "%s: %d: Usage: setenv variable value\n",
 				prog_name, no_runs);
-		free_2d_arrays(argv);
 	}
 	return (2);
 }
@@ -148,14 +146,12 @@ int unset_env(environment *env, char **argv, char *program_name, int no_runs)
 	if (no_of_args == 2)
 	{
 		exit_status = remove_env(&env, argv[1]);
-		free_2d_arrays(argv);
 		return (exit_status);
 	}
 	else
 	{
 		_fprintf(STDERR_FILENO, "%s: %d: Usage: unsetenv variable\n",
 				program_name, no_runs);
-		free_2d_arrays(argv);
 	}
 	return (2);
 }
