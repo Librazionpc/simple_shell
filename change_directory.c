@@ -34,15 +34,18 @@ void change_directory(char **args, char *progName, int run)
 	{
 		dir_needed = getenv("OLDPWD");
 		old_pwd = getcwd(NULL, 0);
-		if (chdir(dir_needed) == 0)
+		if (dir_needed != NULL)
 		{
-			getcwd(dir_needed, 100);
-			setenv("PWD", dir_needed, 1);
-			setenv("OLDPWD", old_pwd, 1);
-			printf("%s\n", getenv("PWD"));
-			free(old_pwd);
-			free(current_pwd);
-			return;
+			if (chdir(dir_needed) == 0)
+			{
+				getcwd(dir_needed, 100);
+				setenv("PWD", dir_needed, 1);
+				setenv("OLDPWD", old_pwd, 1);
+				printf("%s\n", getenv("PWD"));
+				free(old_pwd);
+				free(current_pwd);
+				return;
+			}
 		}
 		else
 		{
@@ -68,8 +71,12 @@ void change_directory(char **args, char *progName, int run)
 			setenv("PWD", new_pwd, 1);
 		}
 		else
+		{
 			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName,
 					run, args[0], args[1]);
+			free(current_pwd);
+			return;
+		}
 		free(new_pwd);
 	}
 	else if (*args[1] == '/')
