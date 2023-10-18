@@ -10,7 +10,7 @@ char *prompt(environment *env_cmp, environment *alias)
 {
 	char *command = NULL;
 	size_t len = 0;
-	ssize_t bytes_read, bytes_written;
+	ssize_t bytes_read = 0, bytes_written = 0;
 
 	if (isatty(0))
 		bytes_written = write(STDIN_FILENO, "$", 1);
