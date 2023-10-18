@@ -1,20 +1,28 @@
 #include "main.h"
 
+/**
+ * change_directory - Function that changes the directoty in shell
+ * @args: The args passed by user
+ * @progName: The name of the program running
+ * @run: No of time shell has worked
+ *
+ * Return: Nothing
+ */
+
+void change_directory(char **args, char *progName, int run);
 void change_directory(char **args, char *progName, int run)
 {
 	char *current_pwd = NULL, *new_pwd, *old_pwd, *dir_needed;
 	size_t new_pwd_size;
 
-	if ((current_pwd = getcwd(NULL, 0)) == NULL)
-	{
+	current_pwd = getcwd(NULL, 0);
+	if (current_pwd == NULL)
 		return;
-	}
-
 	if (strcmp(args[0], "cd") == 0 && args[1] == NULL)
 	{
 		if (chdir(getenv("HOME")) == 0)
 		{
-			dir_needed = get_env("HOME");
+			dir_needed = getenv("HOME");
 			setenv("PWD", dir_needed, 1);
 			setenv("OLDPWD", current_pwd, 1);
 			free(current_pwd);
@@ -23,14 +31,14 @@ void change_directory(char **args, char *progName, int run)
 	}
 	else if (strcmp(args[0], "cd") == 0 && strcmp(args[1], "-") == 0)
 	{
-		dir_needed = get_env("OLDPWD");
+		dir_needed = getenv("OLDPWD");
 		old_pwd = getcwd(NULL, 0);
 		if (chdir(dir_needed) == 0)
 		{
 			getcwd(dir_needed, 100);
 			setenv("PWD", dir_needed, 1);
 			setenv("OLDPWD", old_pwd, 1);
-			printf("%s\n", get_env("PWD"));
+			printf("%s\n", getenv("PWD"));
 			free(old_pwd);
 			free(current_pwd);
 			return;
@@ -59,7 +67,8 @@ void change_directory(char **args, char *progName, int run)
 			setenv("PWD", new_pwd, 1);
 		}
 		else
-			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName, run, args[0], args[1]);
+			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName,
+					run, args[0], args[1]);
 		free(new_pwd);
 	}
 	else if (*args[1] == '/')
@@ -70,7 +79,8 @@ void change_directory(char **args, char *progName, int run)
 			setenv("PWD", args[1], 1);
 		}
 		else
-			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName, run, args[0], args[1]);
-	}	
+			fprintf(stderr, "%s: %d: %s: can't cd to %s\n", progName,
+					run, args[0], args[1]);
+	}
 	free(current_pwd);
 }

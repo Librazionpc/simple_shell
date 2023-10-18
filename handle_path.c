@@ -1,115 +1,115 @@
 #include "main.h"
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
+
+char *get_path(char *command);
 
 /**
- * add_directory_to_list - Function that add the directory to the
- * linked list
- * head: The pointer to the first node
- * directory: The directory to be added
+ * get_full_path - compute the full path of a command
+ * @command: the command to compute it full path
  *
- * Return: Nothing
- */
-void add_directory_to_list(ListOfPath **head, const char *directory)
-{
-	ListOfPath *newNode = NULL;
-	ListOfPath *current = NULL;
-
-	newNode = (ListOfPath *)malloc(sizeof(ListOfPath));
-	if (newNode == NULL)
-	{
-		perror("malloc");
-		return;
-	}
-	current = *head;
-	newNode->directory = strdup(directory);
-	if (newNode->directory == NULL)
-	{
-		free(newNode);
-		return;
-	}
-	newNode->next = NULL;
-
-	if (*head == NULL)
-		*head = newNode;
-	else
-	{
-		while (current->next != NULL)
-		{
-			current = current->next;
-		}
-		current->next = newNode;
-	}
-}
-
-/**
- * createLinkedListofPath - Function that creates a linked for the path
- *
- * Return: The list
+ * Return: the full path
  */
 
-ListOfPath *createLinkedListOfPath()
+char *get_full_path(char *command)
 {
-	char *env_val = NULL, *path = NULL;
-	char *path_token = NULL;
-	ListOfPath *head = NULL;
+	struct stat file_stats;
+	char *full_path, *command_cpy = NULL;
 
-	env_val = get_env("PATH");
-	if (env_val == NULL)
-	{
+	if (command == NULL)
 		return (NULL);
-	}
-	path = strdup(env_val);
-	if (path == NULL)
+	command_cpy = strdup(command);
+	if (stat(command, &file_stats) == -1)
 	{
-		perror("strdup");
-		return (NULL);
-	}
-	path_token = strtok(path, ":");
-
-	if (path_token == NULL)
-	{
-		free(path);
-		return (NULL);
-	}
-
-	while (path_token != NULL)
-	{
-		add_directory_to_list(&head, path_token);
-		path_token = strtok(NULL, ":");
-	}
-	
-	free(path);
-	return (head);
-}
-char *args_exist_in_path(ListOfPath *path_list, char **args)
-{
-	char *cmd_info = NULL, *path_needed = NULL;
-	size_t path_needed_size;
-
-	while (path_list != NULL)
-	{
-		path_needed_size = strlen(path_list->directory) + strlen(args[0]) + 2;
-
-		path_needed = (char *)malloc(path_needed_size);
-		if (path_needed == NULL)
+		full_path = get_path(command_cpy);
+		if (full_path == NULL)
 		{
-			perror("malloc");
+			free(command_cpy);
 			return (NULL);
 		}
-
-		snprintf(path_needed, path_needed_size, "%s/%s", path_list->directory, args[0]);
-		if (access(path_needed, F_OK | X_OK) == 0)
+		else
 		{
-			cmd_info = strdup(path_needed);
-			free(path_needed);
-			return (cmd_info);
+			free(command_cpy);
+			return (full_path);
 		}
-
-		free(path_needed);
-		path_list = path_list->next;
 	}
-	return (cmd_info);
+	return (command_cpy);
+}
+
+/**
+ * get_path - search for each path in the environment variable
+ * @command: a command to search for
+ *
+ * Return: the path if found otherwise return NULL
+ */
+char *get_path(char *command)
+{
+	int i = 0;
+	struct stat file_stats;
+	char **path;
+	char *full_path;
+	char *result = getenv("PATH");
+
+	if (command == NULL)
+		return (NULL);
+	if (result == NULL || *result == '\0')
+		return (NULL);
+	path = split_to_string(result, ':');
+	while (path[i] != NULL)
+	{
+		full_path = concat_string(path[i], command, '/');
+		if (stat(full_path, &file_stats) == 0)
+		{
+			free_2d_arrays(path);
+			return (full_path);
+		}
+		if (full_path != NULL)
+		{
+			free(full_path);
+			full_path = NULL;
+		}
+		i++;
+	}
+	free_2d_arrays(path);
+	return (NULL);
+}
+
+/**
+ * concat_string - concatinate two  strigns
+ * @first: first string
+ * @second: second string
+ * @dil: delimeter to seperate first from second
+ *
+ * Return: the concatinated string
+ */
+char *concat_string(char *first, char *second, char dil)
+{
+	int len_first = 0;
+	int len_second = 0;
+	int i = 0, l = 0;
+	char *concated_string;
+
+	if (first == NULL || second == NULL)
+		return (NULL);
+
+	len_first = strlen(first);
+	len_second = strlen(second);
+
+	concated_string = malloc(sizeof(char) * (len_first + len_second + 2));
+	if (concated_string == NULL)
+		return (NULL);
+	for (l = 0; l < len_first; l++)
+	{
+		concated_string[i] = first[l];
+		i++;
+	}
+	concated_string[i] = dil;
+	i++;
+	for (l = 0; l < len_second; l++)
+	{
+		concated_string[i] = second[l];
+		i++;
+	}
+	concated_string[i] = '\0';
+	return (concated_string);
+
 }

@@ -4,6 +4,8 @@
  * _getline - imitate the getline function
  * @lineptr: a pointer to the buffer to save the line read
  * @n: the size of the buffer
+ * @fd: The file descriptor
+ *
  * Return: the number of byte read
  */
 ssize_t _getline(char **lineptr, size_t *n, int fd)
@@ -45,9 +47,6 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 		}
 	}
 	if (bytes_read == -1)
-	{
-		free(line);
-		return (-1);
-	}
+		return (bytes_read);
 	return (len);
 }
