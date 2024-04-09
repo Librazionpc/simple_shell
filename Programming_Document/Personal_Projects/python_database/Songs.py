@@ -11,7 +11,7 @@ class Song(Base):
     __tablename__ = "songs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String(255), nullable=False)
+    title = Column(String(1024), nullable=False)
     content = Column(Text)
     
     @classmethod

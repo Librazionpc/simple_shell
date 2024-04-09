@@ -28,7 +28,7 @@ Session = sessionmaker(bind=engine)
 # Create a session
 session = Session()
 
-search_title = input("Enter Song Title")
+search_title = input("Enter Song Title ")
 matching_songs = Song.search_song(session, search_title)
 
 if matching_songs:
