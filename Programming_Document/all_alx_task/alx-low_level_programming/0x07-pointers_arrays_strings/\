@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include "main.h"
+/**
+ * _strchr - Fuctions that identify a character in a string
+ *
+ * @s: Argument that fetches the string from main.c
+ * @l: Argument that fetches the charater from to identify from main.c
+ *
+ * Return: The remain string after the character.
+ */
+char *_strchr(char *s, char c)
+{
+	char word_a;
+	int a = 0, b = 0;
+	while (*s)
+	{
+		if (s[a] == c)
+		{
+			while (*s)
+			{
+				word_a = s[a];
+				_putchar('a');
+				a++;
+				b++;
+				s++;
+				return (word_a);
+			}
+		}
+		a++;
+		s++;
+	}
+}
